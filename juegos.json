@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "titulo": "Astro Bot",
+    "sinopsis": "Acompaña a Astro en una gigantesca aventura espacial a través de más de 50 mundos repletos de diversión, peligro y sorpresas en una misión para rescatar a su tripulación perdida.",
+    "caratula_url": "https://igdb.com",
+    "ubicacion_disco": "Disco Duro Externo 1"
+  }
+]
+

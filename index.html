@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Biblioteca de Juegos</title>
+    <style>
+        :root {
+            --bg-main: #0a0d14;
+            --bg-card: #121824;
+            --text-main: #f0f3f8;
+            --text-sub: #8a99ad;
+            --accent: #0070d1;
+            --border: #1f293d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        header {
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin: 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .cover-container {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            background-color: #05070b;
+        }
+
+        .cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 10px 0;
+            line-height: 1.3;
+        }
+
+        .synopsis {
+            color: var(--text-sub);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 0 0 20px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .tag {
+            background-color: var(--accent);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 6px;
+            align-self: flex-start;
+            margin-top: auto;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 20px 15px; }
+            .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+            .info { padding: 15px; }
+            .title { font-size: 1rem; }
+            .synopsis { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Biblioteca PS5</h1>
+        </header>
+
+        <main class="grid" id="juegos-grid">
+            <!-- La tarjeta se generará aquí -->
+        </main>
+    </div>
+
+    <script>
+        const juegoLocal = [{
+            "titulo": "Astro Bot",
+            "sinopsis": "Acompaña a Astro en una gigantesca aventura espacial a través de más de 50 mundos repletos de diversión, peligro y sorpresas en una misión para rescatar a su tripulación perdida.",
+            "caratula_url": "https://igdb.com",
+            "ubicacion_disco": "Disco Duro Externo 1"
+        }];
+
+        function renderizar(datos) {
+            const grid = document.getElementById('juegos-grid');
+            grid.innerHTML = '';
+            datos.forEach(juego => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="cover-container">
+                        <img src="${juego.caratula_url}" alt="${juego.titulo}" class="cover" loading="lazy">
+                    </div>
+                    <div class="info">
+                        <h2 class="title">${juego.titulo}</h2>
+                        <p class="synopsis">${juego.sinopsis}</p>
+                        <span class="tag">${juego.ubicacion_disco}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        fetch('juegos.json')
+            .then(response => {
+                if (!response.ok) throw new Error();
+                return response.json();
+            })
+            .then(datos => renderizar(datos))
+            .catch(() => {
+                console.log("Cargando modo local sin servidor");
+                renderizar(juegoLocal);
+            });
+    </script>
+</body>
+</html>
+
